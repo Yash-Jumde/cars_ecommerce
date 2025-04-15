@@ -1,7 +1,9 @@
-import banner from './banner'
 import product from './product'
+import heroBanner from './heroBanner'
+import footerBanner from './footerBanner'
 
 export const schemaTypes = [
-  banner,
-  product
+  product,
+  heroBanner,
+  footerBanner
 ]

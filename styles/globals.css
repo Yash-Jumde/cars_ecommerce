@@ -933,3 +933,21 @@ margin-top: 160px;
     right: 0;
   }
 }
+
+.shop-now-button {
+  border-radius: 15px;
+  padding: 10px 16px;
+  background-color: #f02d34;
+  color: white;
+  border: none;
+  margin-top: 40px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 10000 !important;
+  transition: transform 0.5s ease;
+}
+
+.shop-now-button:hover {
+  transform: scale(1.1, 1.1);
+}

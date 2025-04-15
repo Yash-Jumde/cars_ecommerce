@@ -4,7 +4,7 @@ import { client } from '../lib/client';
 import { Product, FooterBanner, HeroBanner } from '../components';
 import { useStateContext } from '../context/StateContext';
 
-const Home = ({ bannerData }) => {
+const Home = ({ heroBannerData, footerBannerData }) => {
   const { filteredProducts, loading, searchTerm, selectedCategory } = useStateContext();
   
   // Determine if filters are active
@@ -13,7 +13,9 @@ const Home = ({ bannerData }) => {
   return (
     <div>
       {/* Only show HeroBanner when no filters are active */}
-      {!filtersActive && <HeroBanner heroBanner={bannerData.length && bannerData[0]} />}
+      {!filtersActive && heroBannerData?.length > 0 && (
+        <HeroBanner heroBanner={heroBannerData[0]} />
+      )}
       
       <div className="products-heading">
         <h2>
@@ -44,17 +46,25 @@ const Home = ({ bannerData }) => {
       </div>
 
       {/* Only show FooterBanner when no filters are active */}
-      {!filtersActive && <FooterBanner footerBanner={bannerData && bannerData[0]} />}
+      {!filtersActive && footerBannerData?.length > 0 && (
+        <FooterBanner footerBanner={footerBannerData[0]} />
+      )}
     </div>
   );
 };
 
 export const getServerSideProps = async () => {
-  const bannerQuery = '*[_type == "banner"]';
-  const bannerData = await client.fetch(bannerQuery);
+  const heroBannerQuery = '*[_type == "heroBanner"]';
+  const footerBannerQuery = '*[_type == "footerBanner"]';
+  
+  const heroBannerData = await client.fetch(heroBannerQuery);
+  const footerBannerData = await client.fetch(footerBannerQuery);
 
   return {
-    props: { bannerData }
+    props: { 
+      heroBannerData,
+      footerBannerData
+    }
   }
 }
 
