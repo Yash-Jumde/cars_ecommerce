@@ -1156,3 +1156,260 @@ margin-top: 160px;
 .signup-button:hover {
   background-color: #d41f25;
 }
+
+/* Improved base mobile responsiveness */
+@media screen and (max-width: 768px) {
+  /* Layout adjustments */
+  .main-container {
+    padding: 0 15px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+  
+  .layout {
+    padding: 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Header and navigation */
+  .navbar-container {
+    margin: 6px 0;
+    padding: 0 8px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  /* Search components */
+  .search-container {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .search-input {
+    font-size: 14px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .search-button {
+    padding: 8px;
+  }
+  
+  /* Hero banner and product display */
+  .hero-banner-container {
+    padding: 40px 20px;
+    height: auto;
+    min-height: 320px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .hero-banner-container h1 {
+    font-size: 36px;
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .hero-banner-container h3 {
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .hero-banner-image {
+    max-width: 80%;
+    height: auto;
+    position: relative;
+    margin: 0 auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+  }
+  
+  .shop-now-button {
+    padding: 8px 14px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  /* Product container */
+  .product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Product cards */
+  .product-card {
+    width: 48%;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .product-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Description text */
+  .desc {
+    position: relative;
+    width: 100%;
+    right: auto;
+    bottom: auto;
+    margin-top: 15px;
+    box-sizing: border-box;
+  }
+  
+  /* Specific for miniature cars layout */
+  .limited-time-offer {
+    margin-top: 20px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .limited-time-offer h2 {
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Catalogue section */
+  .catalogue-section {
+    padding: 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .catalogue-heading {
+    font-size: 22px;
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Fix for the specific batmobile display */
+  .iconic-cars-container {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin: 0 auto 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .iconic-cars-image {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 0 auto 15px;
+  }
+  
+  .iconic-cars-text {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Better fixed-width elements on mobile */
+  .all-categories-dropdown {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Search filter container */
+  .search-filter-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+  .navbar-container {
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 15px 0;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .search-filter-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .search-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .limited-time-offer h2 {
+    font-size: 20px;
+  }
+  
+  .shop-now-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  
+  .product-card {
+    width: 100%;
+    margin: 0 auto 15px;
+  }
+  
+  /* Better cart icon placement */
+  .cart-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  /* Center content on very small screens */
+  .hero-banner-container h1,
+  .hero-banner-container h3,
+  .limited-time-offer h2,
+  .catalogue-heading {
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Ensure hero image is properly centered */
+  .hero-banner-image {
+    position: relative;
+    max-width: 90%;
+    margin: 0 auto;
+    right: auto;
+    left: auto;
+    transform: none;
+  }
+}
