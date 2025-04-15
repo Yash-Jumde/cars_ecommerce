@@ -6,15 +6,9 @@ import { Product } from '../../components';
 import { useStateContext } from '../../context/StateContext';
 
 const ProductDetails = ({ product, products }) => {
-  const { image, name, details, price, category } = product;
+  const { image, name, details, price } = product;
   const [index, setIndex] = useState(0);
-  const { decreaseQty, increaseQty, qty, onAdd } = useStateContext();
-
-//   const handleBuyNow = () => {
-//     onAdd(product, qty);
-
-//     setShowCart(true);
-//   }
+  const { decreaseQty, increaseQty, qty, onAdd, handleBuyNow, paymentLoading } = useStateContext();
 
   return (
     <div>
@@ -51,9 +45,7 @@ const ProductDetails = ({ product, products }) => {
           </div>
           <h4>Details: </h4>
           <p>{details}</p>
-          <h4>Category: </h4>
-          <p>{category}</p>
-          <p className="price">₹{price}</p>
+          <p className="price">₹ {price}</p>
           <div className="quantity">
             <h3>Quantity:</h3>
             <p className="quantity-desc">
@@ -64,20 +56,27 @@ const ProductDetails = ({ product, products }) => {
           </div>
           <div className="buttons">
             <button type="button" className="add-to-cart" onClick={() => onAdd(product, qty)}>Add to Cart</button>
-            <button type="button" className="buy-now" onClick="">Buy Now</button>
+            <button 
+              type="button" 
+              className="buy-now" 
+              onClick={() => handleBuyNow(product)}
+              disabled={paymentLoading}
+            >
+              {paymentLoading ? 'Processing...' : 'Buy Now'}
+            </button>
           </div>
         </div>
       </div>
 
       <div className="maylike-products-wrapper">
-          <h2>You may also like</h2>
-          <div className="marquee">
-            <div className="maylike-products-container track">
-              {products.map((item) => (
-                <Product key={item._id} product={item} />
-              ))}
-            </div>
+        <h2>You may also like</h2>
+        <div className="marquee">
+          <div className="maylike-products-container track">
+            {products.map((item) => (
+              <Product key={item._id} product={item} />
+            ))}
           </div>
+        </div>
       </div>
     </div>
   )
@@ -111,8 +110,6 @@ export const getStaticProps = async ({ params: { slug }}) => {
   
   const product = await client.fetch(query);
   const products = await client.fetch(productsQuery);
-
-  console.log(product);
 
   return {
     props: { products, product }
