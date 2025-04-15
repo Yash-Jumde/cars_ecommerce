@@ -1,3 +1,4 @@
+// pages/api/verify-payment.js
 import crypto from 'crypto';
 
 export default async function handler(req, res) {
@@ -6,28 +7,48 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get payment details from request body
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    // Extract payment details from request body
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      userId, // Get user ID
+    } = req.body;
 
-    // Create the signature to verify the payment
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest('hex');
+    // Verify that the user ID exists
+    if (!userId) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'User authentication required',
+      });
+    }
 
-    // Verify the signature
-    const isAuthentic = expectedSignature === razorpay_signature;
+    // Create a signature to verify the payment
+    const shasum = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
+    shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = shasum.digest('hex');
 
-    if (isAuthentic) {
-      // Payment is verified
-      // Here you would typically update your database, mark the order as paid, etc.
-      
-      res.status(200).json({ status: 'success', message: 'Payment verified successfully' });
+    // If signatures match, payment is authorized
+    if (digest === razorpay_signature) {
+
+      // Return success response
+      return res.status(200).json({
+        status: 'success',
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+      });
     } else {
-      res.status(400).json({ status: 'error', message: 'Invalid signature' });
+      // Payment signature verification failed
+      return res.status(400).json({
+        status: 'error',
+        message: 'Payment verification failed',
+      });
     }
   } catch (error) {
-    console.error('Error verifying payment:', error);
-    res.status(500).json({ status: 'error', message: 'Something went wrong', error: error.message });
+    console.error('Payment verification error:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
   }
 }

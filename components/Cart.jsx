@@ -1,18 +1,23 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineLeft, AiOutlineShopping } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 import { useStateContext } from '../context/StateContext';
+import { useAuth } from '../context/AuthContext'; // Import auth context
 import { urlFor } from '../lib/client';
 
 const Cart = () => {
-  const cartRef = useRef();
   const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuanitity, onRemove, makePayment, paymentLoading } = useStateContext();
+  const { currentUser } = useAuth(); // Get current user
+
+  const handleCheckout = () => {
+    makePayment();
+  };
 
   return (
-    <div className="cart-wrapper" ref={cartRef}>
+    <div className="cart-wrapper">
       <div className="cart-container">
         <button
           type="button"
@@ -46,7 +51,7 @@ const Cart = () => {
               <div className="item-desc">
                 <div className="flex top">
                   <h5>{item.name}</h5>
-                  <h4>₹ {item.price}</h4>
+                  <h4>${item.price}</h4>
                 </div>
                 <div className="flex bottom">
                   <div>
@@ -76,16 +81,16 @@ const Cart = () => {
           <div className="cart-bottom">
             <div className="total">
               <h3>Subtotal:</h3>
-              <h3>₹ {totalPrice}</h3>
+              <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
               <button 
                 type="button" 
                 className="btn" 
-                onClick={() => makePayment()}
+                onClick={handleCheckout}
                 disabled={paymentLoading}
               >
-                {paymentLoading ? 'Processing...' : 'Pay with Razorpay'}
+                {paymentLoading ? 'Processing...' : (currentUser ? 'Pay Now' : 'Login to Checkout')}
               </button>
             </div>
           </div>
@@ -95,4 +100,4 @@ const Cart = () => {
   )
 }
 
-export default Cart
+export default Cart;

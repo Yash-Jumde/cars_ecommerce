@@ -166,7 +166,7 @@ width: 100%;
 }
 .hero-banner-image{
   position: absolute;
-  bottom: 5%;
+  top: 5%;
   
   left:60%;
   width: 520;

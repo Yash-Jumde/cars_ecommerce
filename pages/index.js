@@ -21,7 +21,7 @@ const Home = ({ heroBannerData, footerBannerData }) => {
         <h2>
           {filtersActive 
             ? 'Search Results' 
-            : 'Best Seller Products'}
+            : 'Our Catelogue'}
         </h2>
         <p>
           {searchTerm && `Search: "${searchTerm}"`}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useStateContext } from '../context/StateContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -10,12 +11,44 @@ const Signup = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const { signup, loading, currentUser } = useAuth();
+  const { makePayment } = useStateContext();
   const router = useRouter();
 
-  // If user is already logged in, redirect to home page
+  // Handle pending purchase after signup
+  const handlePendingPurchase = () => {
+    const pendingPurchase = sessionStorage.getItem('pendingPurchase');
+    
+    if (pendingPurchase) {
+      try {
+        const { items, amount } = JSON.parse(pendingPurchase);
+        
+        // Clear the pending purchase from session storage
+        sessionStorage.removeItem('pendingPurchase');
+        
+        // Redirect to home first to ensure all contexts are properly loaded
+        router.push('/').then(() => {
+          // Small delay to ensure context is ready
+          setTimeout(() => {
+            makePayment(items, amount);
+          }, 500);
+        });
+        
+        return true;
+      } catch (err) {
+        console.error('Error processing pending purchase:', err);
+      }
+    }
+    
+    return false;
+  };
+
+  // If user is already logged in, check for pending purchase or redirect to home
   useEffect(() => {
     if (currentUser) {
-      router.push('/');
+      const hasPendingPurchase = handlePendingPurchase();
+      if (!hasPendingPurchase) {
+        router.push('/');
+      }
     }
   }, [currentUser, router]);
 
@@ -30,8 +63,8 @@ const Signup = () => {
     
     try {
       await signup(email, password, name);
+      // handlePendingPurchase is called in the useEffect when currentUser changes
     } catch (err) {
-      // Error is already handled in AuthContext with toast
       console.error(err);
     }
   };

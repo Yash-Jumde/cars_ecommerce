@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BsBagCheckFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
 
 import { useStateContext } from '../context/StateContext';
-import { runFireworks } from '../lib/Utlis';
+import withAuth from '../components/WithAuth'; // Import the HOC
 
 const Success = () => {
   const { setcartItems, setTotalPrice, setTotalQuantities } = useStateContext();
+  const [order, setOrder] = useState(null);
   
+  // Reset the cart
   useEffect(() => {
     localStorage.clear();
     setcartItems([]);
     setTotalPrice(0);
     setTotalQuantities(0);
-    runFireworks();
   }, []);
 
   return (
@@ -26,8 +28,8 @@ const Success = () => {
         <p className="email-msg">Check your email inbox for the receipt.</p>
         <p className="description">
           If you have any questions, please email
-          <a className="email" href="mailto:order@miniaturecars.com">
-            order@miniaturecars.com
+          <a className="email" href="mailto:order@example.com">
+            order@example.com
           </a>
         </p>
         <Link href="/">
@@ -40,4 +42,5 @@ const Success = () => {
   )
 }
 
-export default Success
+// Wrap the Success page with the WithAuth HOC to protect it
+export default withAuth(Success);

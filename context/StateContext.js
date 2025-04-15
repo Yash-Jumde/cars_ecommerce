@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { client } from "../lib/client";
 import { useRouter } from 'next/router';
+import { useAuth } from './AuthContext'; // Import the auth context
 
 const Context = createContext();
 
@@ -20,6 +21,7 @@ export const StateContext = ({ children }) => {
     const [paymentLoading, setPaymentLoading] = useState(false);
     
     const router = useRouter();
+    const { currentUser } = useAuth(); // Get the current user from auth context
     
     let foundProduct;
 
@@ -157,6 +159,9 @@ export const StateContext = ({ children }) => {
     // Create Razorpay order
     const createOrder = async (items, totalAmount) => {
         try {
+            // Add user ID to the order if available
+            const userId = currentUser ? currentUser.uid : null;
+            
             const response = await fetch('/api/create-order', {
                 method: 'POST',
                 headers: {
@@ -166,7 +171,8 @@ export const StateContext = ({ children }) => {
                     amount: totalAmount,
                     receipt: 'order_receipt_' + Math.random().toString(36).substring(2, 15),
                     notes: {
-                        items: items.map(item => `${item.name} x ${item.quantity}`).join(', ')
+                        items: items.map(item => `${item.name} x ${item.quantity}`).join(', '),
+                        userId: userId // Include the user ID in order notes
                     }
                 }),
             });
@@ -183,12 +189,18 @@ export const StateContext = ({ children }) => {
     // Handle payment success
     const handlePaymentSuccess = async (response) => {
         try {
+            // Add user ID to the verification if available
+            const userId = currentUser ? currentUser.uid : null;
+            
             const result = await fetch('/api/verify-payment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(response),
+                body: JSON.stringify({
+                    ...response,
+                    userId // Include the user ID in verification
+                }),
             });
             
             const data = await result.json();
@@ -213,8 +225,21 @@ export const StateContext = ({ children }) => {
         }
     };
 
-    // Make payment
+    // Make payment - with authentication check
     const makePayment = async (items = cartItems, amount = totalPrice) => {
+        // Check if user is authenticated
+        if (!currentUser) {
+            // Save current cart state in session storage before redirecting
+            sessionStorage.setItem('pendingPurchase', JSON.stringify({
+                items: items,
+                amount: amount
+            }));
+            
+            toast.error('Please login to complete your purchase');
+            router.push('/login');
+            return;
+        }
+        
         setPaymentLoading(true);
         
         try {
@@ -245,12 +270,13 @@ export const StateContext = ({ children }) => {
                 order_id: order.id,
                 handler: handlePaymentSuccess,
                 prefill: {
-                    name: '',
-                    email: '',
+                    name: currentUser.displayName || '',
+                    email: currentUser.email || '',
                     contact: ''
                 },
                 notes: {
-                    address: 'Miniature Cars Corporate Office'
+                    address: 'Miniature Cars Corporate Office',
+                    userId: currentUser.uid // Include user ID in payment notes
                 },
                 theme: {
                     color: '#f02d34'
