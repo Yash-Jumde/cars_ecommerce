@@ -429,12 +429,13 @@ padding: 30px 65px;
 
   width: 400px;
   height: 400px;
+  object-fit: cover;
   cursor: pointer;
   transition: .3s ease-in-out;
 }
 .product-detail-image:hover{
-  background-color: #f02d34;
-
+  background-color: #000000;
+  transform: scale(1.1);
 }
 .small-images-container{
   display: flex;
@@ -450,7 +451,7 @@ padding: 30px 65px;
 }
 
 .selected-image{
-  background-color:#f02d34;
+  background-color:#000000;
 }
 .reviews{
   color: #f02d34;
