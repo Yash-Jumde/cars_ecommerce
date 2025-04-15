@@ -6,6 +6,7 @@ import { FiFilter } from 'react-icons/fi'
 
 import { Cart } from './'
 import { useStateContext } from '../context/StateContext'
+import AuthButton from './AuthButton'
 
 const Navbar = () => {
     const { 
@@ -164,15 +165,21 @@ const Navbar = () => {
                     )}
                 </div>
             )}
-
-            <button type='button' className='cart-icon' onClick={() => setShowCart(true)}>
-                <AiOutlineShopping />
-                <span className='cart-item-qty'>{totalQuantities}</span>
-            </button>
+            
+            <div className="navbar-right">
+                {/* Auth Button */}
+                <AuthButton />
+                
+                {/* Cart Button */}
+                <button type='button' className='cart-icon' onClick={() => setShowCart(true)}>
+                    <AiOutlineShopping />
+                    <span className='cart-item-qty'>{totalQuantities}</span>
+                </button>
+            </div>
 
             {showCart && <Cart />}
         </div>
     )
 }
 
-export default Navbar
+export default Navbar   
